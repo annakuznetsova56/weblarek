@@ -53,4 +53,7 @@ const apiCommunication = new ApiCommunication(api);
 apiCommunication.getProducts().then(data => {
     cardsModel.catalog = data.items;
     console.log('Каталог: ', cardsModel.catalog);
+})
+.catch(error => {
+    console.log('Возника ошибка при загрузке каталога: ', error);
 });

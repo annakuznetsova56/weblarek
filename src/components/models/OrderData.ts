@@ -28,22 +28,44 @@ export class OrderData implements IOrderData {
     }
 
     checkValidation(): boolean {
-        return this.validatePayment() && this.validateAddress() && this.validateEmail() && this.validatePhone();
+        const validationMessage = this.validatePayment() + this.validateAddress() + this.validateEmail() + this.validatePhone();
+        if(validationMessage === '') {
+            return true;
+        } else {
+            console.log(validationMessage);
+            return false;
+        }
     }
 
-    validatePayment(): boolean {
-        return (this._order.payment === 'card' || this._order.payment === 'cash');
+    validatePayment(): string {
+        if(this._order.payment === 'card' || this._order.payment === 'cash') {
+            return '';
+        } else {
+            return 'Не выбран способ оплаты. ';
+        }
     }
 
-    validateAddress(): boolean {
-        return (this._order.address !== '');
+    validateAddress(): string {
+        if(this._order.address !== '') {
+            return '';
+        } else {
+            return 'Не введен адрес. ';
+        }
     }
 
-    validateEmail(): boolean {
-        return (this._order.email !== '');
+    validateEmail(): string {
+        if(this._order.email !== '') {
+            return '';
+        } else {
+            return 'Не введен email. ';
+        }
     }
 
-    validatePhone(): boolean {
-        return (this._order.phone !== '');
+    validatePhone(): string {
+        if(this._order.phone !== '') {
+            return '';
+        } else {
+            return 'Не введен телефон. ';
+        }
     }
 }

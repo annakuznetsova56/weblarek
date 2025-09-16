@@ -14,11 +14,7 @@ export class ApiCommunication {
             items: []
         };
         await this.api.get('/product/').then(data => {
-            if (data && typeof data === 'object' &&
-                'items' in data && 'total' in data &&
-                Array.isArray(data.items) && typeof data.total === 'number') {
-                    catalogData = data as TCatalogApi;
-                }
+            catalogData = data as TCatalogApi;
         });
         console.log(catalogData);
         return catalogData;

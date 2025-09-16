@@ -51,10 +51,10 @@ export interface IOrderData {
 
     clearData(): void;
     checkValidation(): boolean;
-    validatePayment(): boolean;
-    validateAddress(): boolean;
-    validateEmail(): boolean;
-    validatePhone(): boolean;
+    validatePayment(): string;
+    validateAddress(): string;
+    validateEmail(): string;
+    validatePhone(): string;
     // getOrderData(): IOrderForm;
     // setOrderData(data: IOrderForm): void;
 }
