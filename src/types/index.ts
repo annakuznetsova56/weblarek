@@ -73,3 +73,6 @@ export type TBasketItem = Pick<ICard, 'title' | 'price'>;
 
 export type TCatalogItem = Pick<ICard, 'title' | 'category' | 'image' | 'price'>
 
+export interface ICardActions {
+    onClick: () => void;
+}

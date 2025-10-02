@@ -155,3 +155,186 @@ Presenter - презентер содержит основную логику п
 - async getProducts(): Promise<TCatalogApi> - отправляет get запрос на сервер и получает массив карточек товаров 
 - setOrder(order: TOrderApi): void - отправляет post запрос на сервер, передавая данные заказа
 
+
+### Слой представления
+
+Все классы представления отвечают за отображение элементов разметки. Поля содержат нужные html-элементы, а в методах прописаны сеттеры для соответствующих полей. В конструкторах классов вешаются нужные слушатели и устанавливаются значени полей, контструктор принимает экземпляр брокера событий.
+
+#### Класс Header
+
+Класс отвечает за отображение блока header. В блоке есть один интерактивный элемент - кнопка корзины, а также одно отображение данных - количество товаров в корзине.
+
+Поля класса:
+- basketButton: HTMLButtonElement - иконка корзины
+- counterElement: HTMLElement - счетчик товаров в корзине
+
+Методы класса:
+- set counter(value: number) - установка значения счетчика
+
+#### Класс Gallery
+
+Поля класса:
+- catalogElement: HTMLElement - контейнер для каталога карточек
+
+Методы класса:
+- set catalog(cards: HTMLElement[]) - сеттер для карточек товаров
+
+#### Класс Modal
+
+Поля класса:
+- closeButton: HTMLButtonElement - кнопка закрытия модального окна
+- modalContainer: HTMLElement - контейнер для содержимого модального окна
+
+Методы класса:
+- set modalContent(content: HTMLElement) - вставка нужного содержимого в контейнер модального окна
+- close(): void - закрытие модального окна
+
+#### Класс OrderSuccess
+
+Поля класса:
+- totalPriceElement: HTMLElement - стоимость товаров из корзины, выводимая в окне успеха
+- successButton: HTMLButtonElement - основная кнопка в окне успеха после отправки формы
+
+Методы класса:
+- set totalPrice(value: number) - установка значения списанной стоимости при успехе отправки формы
+
+#### Класс CardView
+
+Родительский класс для всех классов представления карточек
+
+Поля класса:
+- titleElement: HTMLElement - название товара
+- priceElement: HTMLElement - цена товара
+
+Методы класса:
+- set title(cardTitle: string) - установка названия карточки
+- set price(cardPrice: number) - установка цены карточки
+
+#### Класс CardFullView
+
+Родительский класс для карточек с категорией и изображением
+
+Поля класса:
+- categoryElement: HTMLElement - категория товара
+- imageElement: HTMLImageElement - картинка товара
+
+Методы класса:
+- set category(cardCategory: string) - установка категории
+- set image(cardImage: string) - установка изображения товара
+
+#### Класс CatalogCardView
+
+Класс для отображения карточки в каталоге. В конструкторе устанавливается слушатель клика по контейнеру - то есть самой карточке в каталоге
+
+#### Класс PreviewCardView
+
+Класс для отображения карточки в модальном окне
+
+Поля класса:
+- addToBasketButton: HTMLButtonElement - кнопка добавления товара в корзину
+- descriptionElement: HTMLElement - описание товара
+
+Методы класса:
+- set description(text: string) - установка описания товара
+- set buttonState(state: TButtonState) - установка состояния кнопки 
+
+#### Класс BasketCardView
+
+Класс для отображения карточки в корзине
+
+Поля класса:
+- indexElement: HTMLElement - порядковый номер товара в корзине
+- deleteButton: HTMLButtonElement - кнопка удаления товара из корзины
+
+Методы класса:
+- set index(value: number) - установка порядкового номера товара в корзине
+
+#### Класс BasketView
+
+Поля класса:
+- basketElement: HTMLElement - контейнер для корзины с товарами
+- basketOrderButton: HTMLButtonElement - кнопка для оформления заказа из корзины
+- priceElement: HTMLElement - общая стоимость товаров в корзине
+
+Методы класса:
+- set price(value: number) - установка значения итоговой стоимости корзины
+- set orderButtonState(state: boolean) - установка состояния кнопки оформления заказа
+- set basket(items: HTMLElement[]) - заполнение корзины 
+
+#### Класс FormView
+
+Родительский класс для форм. 
+
+Поля класса:
+- submitButton: HTMLButtonElement - кнопка перехода к следующему шагу
+- errorsElement: HTMLElement - поле для ошибок валидации формы
+- thisForm: HTMLFormElement - элемент формы
+
+Методы класса:
+- set errors(validationMessage: string) - установка значения поля с ошибками формы
+- set submitButtonState(formIsValid: boolean) - установка состояния кнопки
+- clear(): void - очистка формы
+
+#### Класс OrderForm
+
+Форма с выбором способа оплаты и вводом адреса доставки
+
+Поля класса:
+- cardPayButton: HTMLButtonElement - кнопка выбора оплаты "онлайн"
+- cashPayButton: HTMLButtonElement - кнопка выбора оплаты "при получении"
+- addressInput: HTMLInputElement - поле ввода адреса доставки
+
+Методы класса:
+- set buttonsState(selectedMethod: TPayment) - установка состояния кнопок выбора способа оплаты
+- getAddress(): string - возвращает текущее значение в поле ввода адреса
+
+#### Класс ContactsForm
+
+Форма с вводом контактных данных
+
+Поля класса:
+- emailInput: HTMLInputElement - поле ввода электронной почты
+- phoneInput: HTMLInputElement - поле ввода телефона
+
+Методы класса:
+- getEmail(): string - возвращает текущее значение в поле ввода почты
+- getPhone(): string - возвращает текущее значение в поле ввода телефона
+
+### События в приложении
+
+События, генерируемые в моделях данных:
+
+- catalog:changed - изменение данных каталога
+- preview:changed - изменение данных превью
+- basket:changed - изменение корзины
+- orderdata:changed - изменение данных заказа
+
+События, генерируемые в представлениях:
+
+- preview:open - открытие карточки (в колбэк передаются данные карточки)
+- card:change - изменение карточки (добавление или удаление из корзины)
+- basket:open - открытие модального окна с корзиной
+- basket:order - переход из корзины к формам заказа
+- order:submit - переход к следующей форме заказа
+- contacts:submit - отправка данных формы контактов на сервер, очистка корзины и переход к следующему шагу
+- order:changed - изменение данных в форме оформления заказа(при вводе)
+- contacts:changed - изменение данных в форме контактов (при вводе)
+- form:cardChosen - выбор способа оплаты "онлайн"
+- form:cashChosen - выбор способа оплаты "при получении"
+- modal:close - закрытие модального окна
+
+
+### Презентер
+
+Слой презентера описан в основном коде приложения
+
+
+
+
+
+
+
+
+
+
+

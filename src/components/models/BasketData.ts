@@ -1,9 +1,10 @@
 import { IBasketData, ICard } from "../../types";
+import { IEvents } from "../base/Events";
 
 export class BasketData implements IBasketData {
     protected _basket: ICard[];
 
-    constructor() {
+    constructor(protected events: IEvents) {
         this._basket = [];
     }
 
@@ -13,14 +14,17 @@ export class BasketData implements IBasketData {
 
     addToBasket(card: ICard): void {
         this._basket.push(card);
+        this.events.emit('basket:changed');
     }
 
     removefromBasket(card: ICard): void {
         this._basket = this._basket.filter(item => item.id !== card.id);
+        this.events.emit('basket:changed');
     }
 
     clearBasket(): void {
         this._basket = [];
+        this.events.emit('basket:changed');
     }
 
     getBasketTotalPrice(): number {

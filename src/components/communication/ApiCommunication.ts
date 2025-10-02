@@ -16,7 +16,6 @@ export class ApiCommunication {
         await this.api.get('/product/').then(data => {
             catalogData = data as TCatalogApi;
         });
-        console.log(catalogData);
         return catalogData;
     }
 

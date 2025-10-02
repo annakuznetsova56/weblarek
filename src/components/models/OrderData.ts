@@ -1,9 +1,10 @@
 import { IOrderData, IOrderForm } from "../../types";
+import { IEvents } from "../base/Events";
 
 export class OrderData implements IOrderData {
     protected _order: IOrderForm;
 
-    constructor() {
+    constructor(protected events: IEvents) {
         this._order = {
         address: '',
         email: '',
@@ -18,6 +19,7 @@ export class OrderData implements IOrderData {
 
     set order(data: IOrderForm) {
         this._order = data;
+        this.events.emit('orderdata:changed');
     }
 
     clearData(): void {
@@ -25,6 +27,7 @@ export class OrderData implements IOrderData {
         this._order.email = '';
         this._order.payment = undefined;
         this._order.phone = '';
+        this.events.emit('orderData:changed');
     }
 
     checkValidation(): boolean {
