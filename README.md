@@ -153,7 +153,7 @@ Presenter - презентер содержит основную логику п
 
 Методы класса:
 - async getProducts(): Promise<TCatalogApi> - отправляет get запрос на сервер и получает массив карточек товаров 
-- setOrder(order: TOrderApi): void - отправляет post запрос на сервер, передавая данные заказа
+- setOrder(order: TOrderApi): Promise<TOrderApi> - отправляет post запрос на сервер, передавая данные заказа
 
 
 ### Слой представления
@@ -259,7 +259,8 @@ Presenter - презентер содержит основную логику п
 Методы класса:
 - set price(value: number) - установка значения итоговой стоимости корзины
 - set orderButtonState(state: boolean) - установка состояния кнопки оформления заказа
-- set basket(items: HTMLElement[]) - заполнение корзины 
+- set basket(items: HTMLElement[]) - заполнение корзины
+- clear(): void - очистка корзины 
 
 #### Класс FormView
 

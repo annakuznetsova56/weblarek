@@ -95,23 +95,21 @@ events.on('basket:changed', () => {
 
 })
 
+const basketElement = cloneTemplate(document.querySelector('#basket') as HTMLTemplateElement);
+const basket = new BasketView(events, basketElement);
+
 events.on('basket:open', () => {
-    const basketElement = cloneTemplate(document.querySelector('#basket') as HTMLTemplateElement);
-    const basket = new BasketView(events, basketElement);
+    
     const basketContent: HTMLElement[] = [];
     let i = 1;
 
-    if(basketModel.getBasketTotalItems() === 0) {
-        basketContent.push(document.createElement('span'));
-        basketContent[0].textContent = 'Корзина пуста';
-        basketContent[0].style.opacity = '30%';
-    } else {
-        basketModel.basket.forEach((item) => {
+    basketModel.basket.forEach((item) => {
         const itemContainer = cloneTemplate(document.querySelector('#card-basket') as HTMLTemplateElement);
         const basketCardView = new BasketCardView(itemContainer, {
             onClick: () => {
                 events.emit('card:change', item);
                 events.emit('modal:close');
+                basket.clear();
                 events.emit('basket:open');
             }
         })
@@ -122,7 +120,6 @@ events.on('basket:open', () => {
         basketContent.push(basketCard); 
         i++;
     })
-    }
     
     modal.modalContent = basket.render({
         price: basketModel.getBasketTotalPrice(),
@@ -215,18 +212,20 @@ events.on('contacts:submit', () => {
         total: basketModel.getBasketTotalPrice(),
         items: basketModel.basket.map(item => item.id)
     }; 
-    apiCommunication.setOrder(orderApi);
-
-    modal.close();
-    formOrder.clear();
-    formContacts.clear();
+    apiCommunication.setOrder(orderApi).then(() => {
+        modal.close();
+        formOrder.clear();
+        formContacts.clear();
     
-    modal.modalContent = orderSuccess.render({
-        totalPrice: basketModel.getBasketTotalPrice()
-    });
+        modal.modalContent = orderSuccess.render({
+            totalPrice: basketModel.getBasketTotalPrice()
+        });
 
-    basketModel.clearBasket();
-    orderModel.clearData();
+        basketModel.clearBasket();
+        orderModel.clearData();
+    }).catch(error => {
+    console.log('Возника ошибка при отправке данных на сервер: ', error);
+    })
 })
 
 

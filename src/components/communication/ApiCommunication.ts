@@ -19,7 +19,7 @@ export class ApiCommunication {
         return catalogData;
     }
 
-    setOrder(order: TOrderApi): void {
-        this.api.post('/order/', order);
+    setOrder(order: TOrderApi): Promise<TOrderApi> {
+        return this.api.post('/order/', order);
     }
 }

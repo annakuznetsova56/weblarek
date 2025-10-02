@@ -20,7 +20,7 @@ export class FormView<T> extends Component<T> {
         this.errorsElement = ensureElement<HTMLElement>('.form__errors', this.container);
         this.thisForm = this.container as HTMLFormElement;
 
-        this.submitButton.addEventListener('click', (evt) => {
+        this.thisForm.addEventListener('submit', (evt) => {
             evt.preventDefault();
             this.events.emit(`${this.thisForm.name}:submit`);
         })

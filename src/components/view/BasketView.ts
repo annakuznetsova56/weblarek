@@ -31,11 +31,23 @@ export class BasketView extends Component<BasketViewData> {
 
     set orderButtonState(state: boolean) {
         this.basketOrderButton.disabled = !state;
+
+        if(!state) {
+            //basketContent.push(document.createElement('span'));
+        this.basketElement.textContent = 'Корзина пуста';
+        this.basketElement.style.opacity = '30%';
+        } else {
+            this.basketElement.style.opacity = '100%';
+        }
     }
 
     set basket(items: HTMLElement[]) {
         items.forEach((item) => {
             this.basketElement.append(item);
         })
+    }
+
+    clear(): void {
+        this.basketElement.innerHTML = '';
     }
 }
